@@ -13,6 +13,8 @@
 
 namespace Wucdbm\Sphinx\ConfigFactory;
 
+use RuntimeException;
+
 class EnvContainer {
 
     private array $env;
@@ -27,5 +29,16 @@ class EnvContainer {
 
     public function has(string $key): ?string {
         return isset($this->env[$key]);
+    }
+
+    public function ensure(array $vars): void {
+        foreach ($vars as $var) {
+            if (!$this->has($var)) {
+                throw new RuntimeException(sprintf(
+                    'ENV Variable %s is required',
+                    $var
+                ));
+            }
+        }
     }
 }
