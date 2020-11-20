@@ -1,0 +1,26 @@
+{
+    "name": "wucdbm/sphinx-config-factory",
+    "description": "Sphinx Config Factory",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Martin Kirilov",
+            "email": "wucdbm@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.8",
+        "wucdbm/php-cs-fixers": "~0.2"
+    },
+    "autoload": {
+        "psr-4": { "Wucdbm\\Sphinx\\ConfigFactory\\": "src" }
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "minimum-stability": "dev"
+}
