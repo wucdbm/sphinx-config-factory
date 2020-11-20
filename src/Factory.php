@@ -59,14 +59,6 @@ class Factory {
         );
     }
 
-    /**
-     * @param string $type ATTR-TYPE is any of the self::ATTR_MULTI_TYPE_* constants
-     * @param string $name
-     * @param string $dataQuery
-     * @param string $rangeQuery
-     *
-     * @return string
-     */
     public function sqlAttrMultiRangedQuery(
         string $type,
         string $name,

@@ -24,4 +24,8 @@ class EnvContainer {
     public function get(string $key): ?string {
         return $this->env[$key] ?? null;
     }
+
+    public function has(string $key): ?string {
+        return isset($this->env[$key]);
+    }
 }
