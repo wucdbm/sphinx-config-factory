@@ -85,9 +85,14 @@ echo $factory->configs([
     $factory->createBaseSource($baseIndexName, $dbConfig),
     // Create source, extend $baseIndexName
     $factory->createSource('main_index', $baseIndexName, [
+        # If you have extra columns in sphinx_index_meta, INSERT INTO is desirable over REPLACE INTO as that'll replace the whole record
         $factory->sqlQueryPre([
             sprintf(
-                'REPLACE INTO sphinx_index_meta (index_name, max_id, last_update) SELECT \'%s\', IFNULL(MAX(id), 0), UNIX_TIMESTAMP() FROM table',
+                '
+                    INSERT INTO sphinx_index_meta (index_name, max_id, last_update) 
+                            SELECT \'%s\', IFNULL(MAX(id), 0), UNIX_TIMESTAMP() FROM data_table
+                        ON DUPLICATE KEY UPDATE max_id = (SELECT IFNULL(MAX(id), 0) FROM data_table), last_update = UNIX_TIMESTAMP()
+                ',
                 'main_index'
             ),
         ]),
@@ -114,7 +119,7 @@ echo $factory->configs([
     $factory->createSource('delta_index', 'main_index', [
         $factory->sqlQueryPre([
             sprintf(
-                'REPLACE INTO sphinx_index_meta (index_name, max_id, last_update) SELECT \'%s\', IFNULL(MAX(id), 0), UNIX_TIMESTAMP() FROM table',
+                'REPLACE INTO sphinx_index_meta (index_name, max_id, last_update) SELECT \'%s\', IFNULL(MAX(id), 0), UNIX_TIMESTAMP() FROM data_table',
                 'delta_index'
             ),
         ]),
