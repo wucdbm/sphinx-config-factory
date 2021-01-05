@@ -40,6 +40,15 @@ class Factory {
         ];
 
         return implode("\n", array_map(function (string $query) {
+            if (false !== strpos($query, "\n")) {
+                $lines = explode("\n", $query);
+                $lines = array_map('trim', $lines);
+                $lines = array_filter($lines, static function(string $line) {
+                    return (bool)$line;
+                });
+                $query = implode(" ", $lines);
+            }
+
             return $this->indent(1, sprintf('sql_query_pre = %s', $query));
         }, $pre));
     }
@@ -301,6 +310,10 @@ EOF;
             'json_autoconv_keynames',
             'plugin_dir',
         ]);
+    }
+
+    public function eof(): string {
+        return "# --eof--\n";
     }
 
     public function listen(string $template): string {
