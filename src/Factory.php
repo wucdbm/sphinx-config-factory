@@ -19,6 +19,71 @@ class Factory {
     public const ATTR_MULTI_TYPE_BIGINT = 'bigint';
     public const ATTR_MULTI_TYPE_TIMESTAMP = 'timestamp';
 
+    public const INDEXER_CONFIGS = [
+        'mem_limit',
+        'max_iops',
+        'max_iosize',
+        'max_xmlpipe2_field',
+        'write_buffer',
+        'max_file_field_buffer',
+        'on_file_field_error',
+        'lemmatizer_cache',
+    ];
+
+    public const SEARCHD_CONFIGS = [
+        'listen',
+        'log',
+        'query_log',
+        'read_timeout',
+        'client_timeout',
+        'max_children',
+        'persistent_connections_limit',
+        'pid_file',
+        'seamless_rotate',
+        'preopen_indexes',
+        'unlink_old',
+        'attr_flush_period',
+        'mva_updates_pool',
+        'max_packet_size',
+        'max_filters',
+        'max_filter_values',
+        'listen_backlog',
+        'read_buffer',
+        'read_unhinted',
+        'max_batch_queries',
+        'subtree_docs_cache',
+        'subtree_hits_cache',
+        'workers',
+        'dist_threads',
+        'binlog_path',
+        'binlog_flush',
+        'binlog_max_log_size',
+        'thread_stack',
+        'expansion_limit',
+        'rt_flush_period',
+        'query_log_format',
+        'mysql_version_string',
+        'collation_server',
+        'collation_libc_locale',
+        'watchdog',
+        'predicted_time_costs',
+        'sphinxql_state',
+        'rt_merge_iops',
+        'rt_merge_maxiosize',
+        'ha_ping_interval',
+        'ha_period_karma',
+        'prefork_rotation_throttle',
+        'snippets_file_prefix',
+    ];
+
+    public const COMMON_CONFIGS = [
+        'lemmatizer_base',
+        'on_json_attr_error',
+        'json_autoconv_numbers',
+        'json_autoconv_keynames',
+        'plugin_dir',
+    ];
+
     private array $queryPre;
     private array $hostVars;
 
@@ -210,15 +275,19 @@ index {$name}
 EOF;
     }
 
-    public function cleanupConfig(array $config, array $keys): array {
+    public function cleanupConfig(array $config, array $keys, $cleanup = false): array {
+        if (!$cleanup) {
+            return $config;
+        }
+
         return array_intersect_key(
             $config,
             array_intersect_key(array_fill_keys($keys, null), $config),
         );
     }
 
-    public function createConfig(string $type, array $config, array $keys): string {
-        $configs = $this->cleanupConfig($config, $keys);
+    public function createConfig(string $type, array $config, array $keys, $cleanup = false): string {
+        $configs = $this->cleanupConfig($config, $keys, $cleanup);
 
         $lines = [];
         foreach ($configs as $key => $value) {
@@ -241,75 +310,16 @@ EOF;
 EOF;
     }
 
-    public function createIndexerConfig(array $config): string {
-        return $this->createConfig('indexer', $config, [
-            'mem_limit',
-            'max_iops',
-            'max_iosize',
-            'max_xmlpipe2_field',
-            'write_buffer',
-            'max_file_field_buffer',
-            'on_file_field_error',
-            'lemmatizer_cache',
-        ]);
+    public function createIndexerConfig(array $config, $cleanup = false): string {
+        return $this->createConfig('indexer', $config, self::INDEXER_CONFIGS, $cleanup);
     }
 
-    public function createSearchdConfig(array $config): string {
-        return $this->createConfig('searchd', $config, [
-            'listen',
-            'log',
-            'query_log',
-            'read_timeout',
-            'client_timeout',
-            'max_children',
-            'persistent_connections_limit',
-            'pid_file',
-            'seamless_rotate',
-            'preopen_indexes',
-            'unlink_old',
-            'attr_flush_period',
-            'mva_updates_pool',
-            'max_packet_size',
-            'max_filters',
-            'max_filter_values',
-            'listen_backlog',
-            'read_buffer',
-            'read_unhinted',
-            'max_batch_queries',
-            'subtree_docs_cache',
-            'subtree_hits_cache',
-            'workers',
-            'dist_threads',
-            'binlog_path',
-            'binlog_flush',
-            'binlog_max_log_size',
-            'thread_stack',
-            'expansion_limit',
-            'rt_flush_period',
-            'query_log_format',
-            'mysql_version_string',
-            'collation_server',
-            'collation_libc_locale',
-            'watchdog',
-            'predicted_time_costs',
-            'sphinxql_state',
-            'rt_merge_iops',
-            'rt_merge_maxiosize',
-            'ha_ping_interval',
-            'ha_period_karma',
-            'prefork_rotation_throttle',
-            'snippets_file_prefix',
-        ]);
+    public function createSearchdConfig(array $config, $cleanup = false): string {
+        return $this->createConfig('searchd', $config, self::SEARCHD_CONFIGS, $cleanup);
     }
 
-    public function createCommonConfig(array $config): string {
-        return $this->createConfig('common', $config, [
-            'lemmatizer_base',
-            'on_json_attr_error',
-            'json_autoconv_numbers',
-            'json_autoconv_keynames',
-            'plugin_dir',
-        ]);
+    public function createCommonConfig(array $config, $cleanup = false): string {
+        return $this->createConfig('common', $config, self::COMMON_CONFIGS, $cleanup);
     }
 
     public function eof(): string {
