@@ -222,12 +222,12 @@ EOF;
 
         $lines = [];
         foreach ($configs as $key => $value) {
-            if (is_string($value)) {
-                $lines[] = $this->indent(1, sprintf('%s = %s', $key, $value));
-            } else {
+            if (is_array($value)) {
                 foreach ($value as $item) {
                     $lines[] = $this->indent(1, sprintf('%s = %s', $key, $item));
                 }
+            } else {
+                $lines[] = $this->indent(1, sprintf('%s = %s', $key, $value));
             }
         }
 
