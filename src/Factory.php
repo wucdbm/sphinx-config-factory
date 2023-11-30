@@ -210,6 +210,20 @@ EOF;
         return implode("\n", $lines);
     }
 
+    public function createFields(array $attrs): string {
+        $lines = [];
+
+        foreach ($attrs as $name => $type) {
+            $lines[] = $this->indent(1, sprintf(
+                'sql_field_%s = %s',
+                $type,
+                $name
+            ));
+        }
+
+        return implode("\n", $lines);
+    }
+
     public function createSourceSql(
         string $sql,
         array $where = []
