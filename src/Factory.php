@@ -181,17 +181,17 @@ class Factory {
         return implode("; \\\n", $lines);
     }
 
-    public function createBaseSource(string $name, array $config): string {
+    public function createBaseSource(string $name, DatabaseConnection $connection): string {
         return <<<EOF
 source {$name}
 {
-    type                    = {$config['type']}
+    type                    = {$connection->type}
 
-    sql_host                = {$config['host']}
-    sql_port                = {$config['port']}  # optional, default is 3306
-    sql_db                  = {$config['name']}
-    sql_user                = {$config['user']}
-    sql_pass                = {$config['pass']}
+    sql_host                = {$connection->host}
+    sql_port                = {$connection->port}  # optional, default is 3306
+    sql_db                  = {$connection->database}
+    sql_user                = {$connection->username}
+    sql_pass                = {$connection->password}
 }
 EOF;
     }
