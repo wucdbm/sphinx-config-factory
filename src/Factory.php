@@ -85,10 +85,14 @@ class Factory {
     ];
 
     private array $queryPre;
+    private array $queryPost;
+    private array $queryPostIndex;
     private array $hostVars;
 
     public function __construct(array $options) {
         $this->queryPre = $options['sql_query_pre'] ?? [];
+        $this->queryPost = $options['sql_query_post'] ?? [];
+        $this->queryPostIndex = $options['sql_query_post_index'] ?? [];
         $hostVars = $options['host_vars'] ?? [];
         $this->hostVars = array_combine(
             array_map(static function (string $var) {
@@ -99,23 +103,48 @@ class Factory {
     }
 
     public function sqlQueryPre(array $extra = []): string {
-        $pre = [
-            ...$this->queryPre,
-            ...$extra,
-        ];
+        return $this->sqlQueryPrePostIndex(
+            SqlQueryPrePostType::sql_query_pre,
+            [
+                ...$this->queryPre,
+                ...$extra,
+            ]
+        );
+    }
 
-        return implode("\n", array_map(function (string $query) {
+    public function sqlQueryPost(array $extra = []): string {
+        return $this->sqlQueryPrePostIndex(
+            SqlQueryPrePostType::sql_query_post,
+            [
+                ...$this->queryPost,
+                ...$extra,
+            ]
+        );
+    }
+
+    public function sqlQueryPostIndex(array $extra = []): string {
+        return $this->sqlQueryPrePostIndex(
+            SqlQueryPrePostType::sql_query_post_index,
+            [
+                ...$this->queryPostIndex,
+                ...$extra,
+            ]
+        );
+    }
+
+    private function sqlQueryPrePostIndex(SqlQueryPrePostType $type, array $queries = []): string {
+        return implode("\n", array_map(function (string $query) use ($type) {
             if (false !== strpos($query, "\n")) {
                 $lines = explode("\n", $query);
-                $lines = array_map('trim', $lines);
+                $lines = array_map(trim(...), $lines);
                 $lines = array_filter($lines, static function(string $line) {
                     return (bool)$line;
                 });
                 $query = implode(" ", $lines);
             }
 
-            return $this->indent(1, sprintf('sql_query_pre = %s', $query));
-        }, $pre));
+            return $this->indent(1, sprintf('%s = %s', $type->value, $query));
+        }, $queries));
     }
 
     public function indent(int $times, string $string): string {
