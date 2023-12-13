@@ -13,4 +13,18 @@ final readonly class DatabaseConnection
         public string $password
     ) {
     }
+
+    public static function fromUrl(string $url): self
+    {
+        $db = parse_url($url);
+
+        return new self(
+            $db['scheme'],
+            $db['host'],
+            $db['port'],
+            ltrim($db['path'], '/'),
+            $db['user'],
+            $db['pass'],
+        );
+    }
 }
