@@ -17,6 +17,11 @@ readonly class ManticoreDistributedIndex implements ConfigPart
         $this->indices = $indices;
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
     public function toString(): string
     {
         $str = ConfigHelper::indent(

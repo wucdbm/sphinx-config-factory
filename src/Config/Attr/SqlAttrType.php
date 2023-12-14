@@ -1,6 +1,6 @@
 <?php
 
-namespace Wucdbm\Sphinx\ConfigFactory\Config;
+namespace Wucdbm\Sphinx\ConfigFactory\Config\Attr;
 
 enum SqlAttrType: string
 {

@@ -14,7 +14,7 @@
 namespace Wucdbm\Sphinx\ConfigFactory;
 
 use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
-use Wucdbm\Sphinx\ConfigFactory\Config\SqlAttr;
+use Wucdbm\Sphinx\ConfigFactory\Config\Attr\SqlAttr;
 use Wucdbm\Sphinx\ConfigFactory\Config\SqlQuery;
 use Wucdbm\Sphinx\ConfigFactory\Config\SqlQueryType;
 

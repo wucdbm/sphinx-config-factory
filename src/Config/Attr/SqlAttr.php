@@ -1,6 +1,8 @@
 <?php
 
-namespace Wucdbm\Sphinx\ConfigFactory\Config;
+namespace Wucdbm\Sphinx\ConfigFactory\Config\Attr;
+
+use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
 
 readonly class SqlAttr implements ConfigPart
 {
