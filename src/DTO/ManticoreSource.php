@@ -4,7 +4,7 @@ namespace Wucdbm\Sphinx\ConfigFactory\DTO;
 
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
-readonly class Source implements ConfigPart
+readonly class ManticoreSource implements ConfigPart
 {
     /** @var ConfigPart[] */
     private array $configParts;
@@ -16,6 +16,11 @@ readonly class Source implements ConfigPart
     )
     {
         $this->configParts = $configParts;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     public function toString(): string

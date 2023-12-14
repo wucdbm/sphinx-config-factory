@@ -4,11 +4,11 @@ namespace Wucdbm\Sphinx\ConfigFactory\DTO;
 
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
-readonly class Index implements ConfigPart
+readonly class ManticoreIndex implements ConfigPart
 {
     public function __construct(
         private string $name,
-        private string $source,
+        private ManticoreSource $source,
         private string $storage,
     )
     {
@@ -24,7 +24,7 @@ readonly class Index implements ConfigPart
     {
         $sourceLine = sprintf(
             'source = %s',
-            $this->source
+            $this->source->getName()
         );
         $pathLine = sprintf(
             'path = %s',
