@@ -15,6 +15,8 @@ namespace Wucdbm\Sphinx\ConfigFactory;
 
 use Wucdbm\Sphinx\ConfigFactory\DTO\ConfigPart;
 use Wucdbm\Sphinx\ConfigFactory\DTO\SqlAttr;
+use Wucdbm\Sphinx\ConfigFactory\DTO\SqlQuery;
+use Wucdbm\Sphinx\ConfigFactory\DTO\SqlQueryType;
 
 class Factory {
 
@@ -150,6 +152,43 @@ class Factory {
         }, $queries));
     }
 
+    public function sqlQueryPreDto(array $extra = []): array {
+        return $this->sqlQueryPrePostIndexDto(
+            SqlQueryType::pre,
+            [
+                ...$this->queryPre,
+                ...$extra,
+            ]
+        );
+    }
+
+    public function sqlQueryPostDto(array $extra = []): array {
+        return $this->sqlQueryPrePostIndexDto(
+            SqlQueryType::post,
+            [
+                ...$this->queryPost,
+                ...$extra,
+            ]
+        );
+    }
+
+    public function sqlQueryPostIndexDto(array $extra = []): array {
+        return $this->sqlQueryPrePostIndexDto(
+            SqlQueryType::post_index,
+            [
+                ...$this->queryPostIndex,
+                ...$extra,
+            ]
+        );
+    }
+
+    private function sqlQueryPrePostIndexDto(SqlQueryType $type, array $queries = []): array {
+        return array_map(
+            fn(string $query) => new SqlQuery($type, $query),
+            $queries
+        );
+    }
+
     public function configPartsToStringArray(ConfigPart ...$parts): array
     {
         return array_map(fn(ConfigPart $part) => $part->toString(), $parts);
@@ -237,24 +276,6 @@ EOF;
         $lines = [];
 
         foreach ($attrs as $name => $type) {
-            $lines[] = $this->indent(1, sprintf(
-                'sql_attr_%s = %s',
-                $type,
-                $name
-            ));
-        }
-
-        return implode("\n", $lines);
-    }
-
-    /**
-     * @return SqlAttr[]
-     */
-    public function createSqlAttrs(array $attrs): array {
-        $lines = [];
-
-        foreach ($attrs as $name => $type) {
-            $lines[] = new SqlAttr()
             $lines[] = $this->indent(1, sprintf(
                 'sql_attr_%s = %s',
                 $type,

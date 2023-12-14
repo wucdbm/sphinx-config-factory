@@ -7,6 +7,7 @@ use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 readonly class SqlQuery implements ConfigPart
 {
     public function __construct(
+        private SqlQueryType $type,
         private string $sql,
         private array $where = []
     )
@@ -26,9 +27,9 @@ WHERE \
 ASD;
         }
 
+        $type = $this->type->toString();
         return <<<EOF
-sql_query = \
-    {$sql}
+{$type} = {$sql}
 EOF;
     }
 }
