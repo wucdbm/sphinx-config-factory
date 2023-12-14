@@ -4,6 +4,7 @@ namespace Wucdbm\Sphinx\ConfigFactory\Config;
 
 enum SqlAttrType: string
 {
+    case string = 'string';
     case uint = 'uint';
     case bigint = 'bigint';
     case bool = 'bool';
