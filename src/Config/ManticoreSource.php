@@ -140,6 +140,48 @@ readonly class ManticoreSource implements ConfigPart
         );
     }
 
+    public function withPreQuery(string $query): self
+    {
+        return new self(
+            $this->name,
+            $this->parent,
+            $this->attr,
+            $this->attrMulti,
+            [
+                ...$this->getQueries(),
+                new SqlQuery(SqlQueryType::pre, $query)
+            ]
+        );
+    }
+
+    public function withPostQuery(string $query): self
+    {
+        return new self(
+            $this->name,
+            $this->parent,
+            $this->attr,
+            $this->attrMulti,
+            [
+                ...$this->getQueries(),
+                new SqlQuery(SqlQueryType::post, $query)
+            ]
+        );
+    }
+
+    public function withPostIndexQuery(string $query): self
+    {
+        return new self(
+            $this->name,
+            $this->parent,
+            $this->attr,
+            $this->attrMulti,
+            [
+                ...$this->getQueries(),
+                new SqlQuery(SqlQueryType::post_index, $query)
+            ]
+        );
+    }
+
     private function getQueries(): array
     {
         return [
