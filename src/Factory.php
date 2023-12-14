@@ -423,4 +423,8 @@ EOF;
     public function configs(array $configs): string {
         return implode("\n\n", $configs);
     }
+
+    public function configsDTOs(ConfigPart ...$parts): string {
+        return implode("\n\n", array_map(fn(ConfigPart $part) => $part->toString(), $parts));
+    }
 }
