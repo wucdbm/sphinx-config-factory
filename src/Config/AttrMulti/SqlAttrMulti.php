@@ -3,8 +3,6 @@
 namespace Wucdbm\Sphinx\ConfigFactory\Config\AttrMulti;
 
 use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
-use Wucdbm\Sphinx\ConfigFactory\Config\AttrMulti\SqlAttrMultiFieldType;
-use Wucdbm\Sphinx\ConfigFactory\Config\AttrMulti\SqlAttrMultiSourceType;
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
 readonly class SqlAttrMulti implements ConfigPart

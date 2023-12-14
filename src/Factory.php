@@ -15,8 +15,8 @@ namespace Wucdbm\Sphinx\ConfigFactory;
 
 use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
 use Wucdbm\Sphinx\ConfigFactory\Config\Attr\SqlAttr;
-use Wucdbm\Sphinx\ConfigFactory\Config\SqlQuery;
-use Wucdbm\Sphinx\ConfigFactory\Config\SqlQueryType;
+use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQuery;
+use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQueryType;
 
 class Factory {
 

@@ -1,7 +1,9 @@
 <?php
 
-namespace Wucdbm\Sphinx\ConfigFactory\Config;
+namespace Wucdbm\Sphinx\ConfigFactory\Config\Query;
 
+use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
+use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQueryType;
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
 readonly class SqlQuery implements ConfigPart
@@ -12,6 +14,11 @@ readonly class SqlQuery implements ConfigPart
         private array $where = []
     )
     {
+    }
+
+    public function getType(): SqlQueryType
+    {
+        return $this->type;
     }
 
     public function toString(): string

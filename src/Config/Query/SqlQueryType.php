@@ -1,6 +1,6 @@
 <?php
 
-namespace Wucdbm\Sphinx\ConfigFactory\Config;
+namespace Wucdbm\Sphinx\ConfigFactory\Config\Query;
 
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
