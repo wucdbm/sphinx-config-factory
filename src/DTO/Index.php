@@ -35,8 +35,9 @@ readonly class Index implements ConfigPart
             $sourceLine,
             $pathLine,
             'min_word_len            = 2',
-            'min_prefix_len          = 2',
-            'max_substring_len = 6',
+            'min_prefix_len          = 2, max_substring_len = 6',
+//            'min_prefix_len          = 2',
+//            'max_substring_len = 6',
         ];
 
         $config = ConfigHelper::indent(1, implode("\n", $lines));
