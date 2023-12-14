@@ -28,15 +28,19 @@ readonly class SqlAttrMulti implements ConfigPart
         $lines = [$attr];
 
         if (!empty($this->dataQuery)) {
-            $lines[] = ConfigHelper::indent(5, ConfigHelper::terminateLines($this->dataQuery));
+            $lines[] = ConfigHelper::indent(
+                5,
+                ConfigHelper::terminateLines(trim($this->dataQuery))
+            );
         }
 
         if (!empty($this->rangeQuery)) {
-            $lines[] = ConfigHelper::indent(5, ConfigHelper::terminateLines($this->rangeQuery));
+            $lines[] = ConfigHelper::indent(
+                5,
+                ConfigHelper::terminateLines(trim($this->rangeQuery))
+            );
         }
 
-        // todo can't we reuse that
         return ConfigHelper::terminateLinesArray($lines, "; \\\n");
-        return implode("; \\\n", $lines);
     }
 }
