@@ -29,12 +29,7 @@ class ConfigHelper
     {
         return implode(
             $with,
-            array_map(
-                static function (string $line) use ($with) {
-                    return $line . $with;
-                },
-                $lines
-            )
+            $lines
         );
     }
 }
