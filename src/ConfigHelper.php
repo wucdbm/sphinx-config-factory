@@ -20,12 +20,12 @@ class ConfigHelper
         );
     }
 
-    public static function terminateLines(string $lines, string $with = ' \\'): string
+    public static function terminateLines(string $lines, string $with = " \\\n"): string
     {
         return self::terminateLinesArray(explode("\n", $lines), $with);
     }
 
-    public static function terminateLinesArray(array $lines, string $with = ' \\\n'): string
+    public static function terminateLinesArray(array $lines, string $with = " \\\n"): string
     {
         return implode(
             $with,

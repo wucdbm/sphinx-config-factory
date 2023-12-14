@@ -36,7 +36,7 @@ readonly class SqlAttrMulti implements ConfigPart
         }
 
         // todo can't we reuse that
-        return ConfigHelper::terminateLinesArray($lines, '; \\\n');
+        return ConfigHelper::terminateLinesArray($lines, "; \\\n");
         return implode("; \\\n", $lines);
     }
 }
