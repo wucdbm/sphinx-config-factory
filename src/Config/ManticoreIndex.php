@@ -1,6 +1,6 @@
 <?php
 
-namespace Wucdbm\Sphinx\ConfigFactory\DTO;
+namespace Wucdbm\Sphinx\ConfigFactory\Config;
 
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
@@ -43,6 +43,8 @@ readonly class ManticoreIndex implements ConfigPart
         $config = ConfigHelper::indent(1, implode("\n", $lines));
 
         return <<<EOF
+{$this->source->toString()}
+
 index {$this->name}
 {
 {$config}

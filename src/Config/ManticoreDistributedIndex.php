@@ -1,10 +1,10 @@
 <?php
 
-namespace Wucdbm\Sphinx\ConfigFactory\DTO;
+namespace Wucdbm\Sphinx\ConfigFactory\Config;
 
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
-readonly class DistributedIndex implements ConfigPart
+readonly class ManticoreDistributedIndex implements ConfigPart
 {
     /** @var TargetIndex[] */
     private readonly array $indices;
@@ -34,7 +34,17 @@ readonly class DistributedIndex implements ConfigPart
             )
         );
 
+        $indices = implode(
+            "\n\n",
+            array_map(
+                fn(TargetIndex $index) => $index->index->toString(),
+                $this->indices
+            )
+        );
+
         return <<<EOF
+{$indices}
+
 index {$this->name}
 {
     type = distributed

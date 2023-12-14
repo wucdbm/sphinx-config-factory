@@ -1,6 +1,6 @@
 <?php
 
-namespace Wucdbm\Sphinx\ConfigFactory\DTO;
+namespace Wucdbm\Sphinx\ConfigFactory\Config;
 
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 

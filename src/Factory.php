@@ -13,10 +13,10 @@
 
 namespace Wucdbm\Sphinx\ConfigFactory;
 
-use Wucdbm\Sphinx\ConfigFactory\DTO\ConfigPart;
-use Wucdbm\Sphinx\ConfigFactory\DTO\SqlAttr;
-use Wucdbm\Sphinx\ConfigFactory\DTO\SqlQuery;
-use Wucdbm\Sphinx\ConfigFactory\DTO\SqlQueryType;
+use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
+use Wucdbm\Sphinx\ConfigFactory\Config\SqlAttr;
+use Wucdbm\Sphinx\ConfigFactory\Config\SqlQuery;
+use Wucdbm\Sphinx\ConfigFactory\Config\SqlQueryType;
 
 class Factory {
 
