@@ -16,7 +16,7 @@ readonly class SqlQuery implements ConfigPart
 
     public function toString(): string
     {
-        $sql = ConfigHelper::terminateLines($this->sql);
+        $sql = ConfigHelper::terminateLines(trim($this->sql));
 
         if (count($this->where)) {
             $whereString = ConfigHelper::terminateLines(implode("\n", $this->where));
