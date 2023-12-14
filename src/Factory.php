@@ -13,6 +13,8 @@
 
 namespace Wucdbm\Sphinx\ConfigFactory;
 
+use Wucdbm\Sphinx\ConfigFactory\DTO\ConfigPart;
+
 class Factory {
 
     public const ATTR_MULTI_TYPE_UINT = 'uint';
@@ -145,6 +147,11 @@ class Factory {
 
             return $this->indent(1, sprintf('%s = %s', $type->value, $query));
         }, $queries));
+    }
+
+    public function configPartsToStringArray(ConfigPart ...$parts): array
+    {
+        return array_map(fn(ConfigPart $part) => $part->toString(), $parts);
     }
 
     public function indent(int $times, string $string): string {
