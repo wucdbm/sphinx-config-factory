@@ -14,17 +14,12 @@
 namespace Wucdbm\Sphinx\ConfigFactory;
 
 use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
-use Wucdbm\Sphinx\ConfigFactory\Config\Attr\SqlAttr;
 use Wucdbm\Sphinx\ConfigFactory\Config\ManticoreSource;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQuery;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQueryType;
 
-class Factory {
-
-    public const ATTR_MULTI_TYPE_UINT = 'uint';
-    public const ATTR_MULTI_TYPE_BIGINT = 'bigint';
-    public const ATTR_MULTI_TYPE_TIMESTAMP = 'timestamp';
-
+class Factory
+{
     public const INDEXER_CONFIGS = [
         'mem_limit',
         'max_iops',
@@ -95,7 +90,8 @@ class Factory {
     private array $queryPostIndex;
     private array $hostVars;
 
-    public function __construct(array $options) {
+    public function __construct(array $options)
+    {
         $this->queryPre = $options['sql_query_pre'] ?? [];
         $this->queryPost = $options['sql_query_post'] ?? [];
         $this->queryPostIndex = $options['sql_query_post_index'] ?? [];
@@ -108,53 +104,58 @@ class Factory {
         );
     }
 
-    public function sqlQueryPre(array $extra = []): string {
-        return $this->sqlQueryPrePostIndex(
-            SqlQueryPrePostType::sql_query_pre,
-            [
-                ...$this->queryPre,
-                ...$extra,
-            ]
-        );
-    }
+//    public function sqlQueryPre(array $extra = []): string
+//    {
+//        return $this->sqlQueryPrePostIndex(
+//            SqlQueryPrePostType::sql_query_pre,
+//            [
+//                ...$this->queryPre,
+//                ...$extra,
+//            ]
+//        );
+//    }
 
-    public function sqlQueryPost(array $extra = []): string {
-        return $this->sqlQueryPrePostIndex(
-            SqlQueryPrePostType::sql_query_post,
-            [
-                ...$this->queryPost,
-                ...$extra,
-            ]
-        );
-    }
+//    public function sqlQueryPost(array $extra = []): string
+//    {
+//        return $this->sqlQueryPrePostIndex(
+//            SqlQueryPrePostType::sql_query_post,
+//            [
+//                ...$this->queryPost,
+//                ...$extra,
+//            ]
+//        );
+//    }
 
-    public function sqlQueryPostIndex(array $extra = []): string {
-        return $this->sqlQueryPrePostIndex(
-            SqlQueryPrePostType::sql_query_post_index,
-            [
-                ...$this->queryPostIndex,
-                ...$extra,
-            ]
-        );
-    }
+//    public function sqlQueryPostIndex(array $extra = []): string
+//    {
+//        return $this->sqlQueryPrePostIndex(
+//            SqlQueryPrePostType::sql_query_post_index,
+//            [
+//                ...$this->queryPostIndex,
+//                ...$extra,
+//            ]
+//        );
+//    }
 
-    private function sqlQueryPrePostIndex(SqlQueryPrePostType $type, array $queries = []): string {
-        return implode("\n", array_map(function (string $query) use ($type) {
-            if (false !== strpos($query, "\n")) {
-                $lines = explode("\n", $query);
-                $lines = array_map(trim(...), $lines);
-                $lines = array_filter($lines, static function(string $line) {
-                    return (bool)$line;
-                });
-                $query = implode(" ", $lines);
-            }
+//    private function sqlQueryPrePostIndex(SqlQueryPrePostType $type, array $queries = []): string
+//    {
+//        return implode("\n", array_map(function (string $query) use ($type) {
+//            if (false !== strpos($query, "\n")) {
+//                $lines = explode("\n", $query);
+//                $lines = array_map(trim(...), $lines);
+//                $lines = array_filter($lines, static function (string $line) {
+//                    return (bool)$line;
+//                });
+//                $query = implode(" ", $lines);
+//            }
+//
+//            return $this->indent(1, sprintf('%s = %s', $type->value, $query));
+//        }, $queries));
+//    }
 
-            return $this->indent(1, sprintf('%s = %s', $type->value, $query));
-        }, $queries));
-    }
-
-    public function sqlQueryPreDto(array $extra = []): array {
-        return $this->sqlQueryPrePostIndexDto(
+    public function sqlQueryPre(array $extra = []): array
+    {
+        return $this->createSqlQueries(
             SqlQueryType::pre,
             [
                 ...$this->queryPre,
@@ -163,8 +164,9 @@ class Factory {
         );
     }
 
-    public function sqlQueryPostDto(array $extra = []): array {
-        return $this->sqlQueryPrePostIndexDto(
+    public function sqlQueryPost(array $extra = []): array
+    {
+        return $this->createSqlQueries(
             SqlQueryType::post,
             [
                 ...$this->queryPost,
@@ -173,8 +175,9 @@ class Factory {
         );
     }
 
-    public function sqlQueryPostIndexDto(array $extra = []): array {
-        return $this->sqlQueryPrePostIndexDto(
+    public function sqlQueryPostIndex(array $extra = []): array
+    {
+        return $this->createSqlQueries(
             SqlQueryType::post_index,
             [
                 ...$this->queryPostIndex,
@@ -183,219 +186,235 @@ class Factory {
         );
     }
 
-    private function sqlQueryPrePostIndexDto(SqlQueryType $type, array $queries = []): array {
+    private function createSqlQueries(SqlQueryType $type, array $queries = []): array
+    {
         return array_map(
             fn(string $query) => new SqlQuery($type, $query),
             $queries
         );
     }
 
-    public function configPartsToStringArray(ConfigPart ...$parts): array
-    {
-        return array_map(fn(ConfigPart $part) => $part->toString(), $parts);
-    }
+//    public function configPartsToStringArray(ConfigPart ...$parts): array
+//    {
+//        return array_map(fn(ConfigPart $part) => $part->toString(), $parts);
+//    }
 
-    public function indent(int $times, string $string): string {
-        $spaces = $times * 4;
-        $lines = explode("\n", $string);
+//    public function indent(int $times, string $string): string
+//    {
+//        $spaces = $times * 4;
+//        $lines = explode("\n", $string);
+//
+//        return implode(
+//            "\n",
+//            array_map(
+//                static function ($line) use ($spaces) {
+//                    return str_repeat(' ', $spaces) . $line;
+//                },
+//                $lines
+//            )
+//        );
+//    }
 
-        return implode(
-            "\n",
-            array_map(
-                static function ($line) use ($spaces) {
-                    return str_repeat(' ', $spaces).$line;
-                },
-                $lines
-            )
-        );
-    }
+//    public function sqlAttrMultiRangedQuery(
+//        string $type,
+//        string $name,
+//        string $dataQuery,
+//        string $rangeQuery
+//    ): string
+//    {
+//        $lines = [
+//            $this->indent(1, sprintf(
+//                'sql_attr_multi = %s %s from ranged-query',
+//                $type,
+//                $name
+//            )),
+//            $this->indent(6, $dataQuery),
+//            $this->indent(6, $rangeQuery),
+//        ];
+//
+//        return implode("; \\\n", $lines);
+//    }
 
-    public function sqlAttrMultiRangedQuery(
-        string $type,
-        string $name,
-        string $dataQuery,
-        string $rangeQuery
-    ): string {
-        $lines = [
-            $this->indent(1, sprintf(
-                'sql_attr_multi = %s %s from ranged-query',
-                $type,
-                $name
-            )),
-            $this->indent(6, $dataQuery),
-            $this->indent(6, $rangeQuery),
-        ];
+//    public function createBaseSource(string $name, DatabaseConnection $connection): string
+//    {
+//        return <<<EOF
+//source {$name}
+//{
+//    type                    = {$connection->type}
+//
+//    sql_host                = {$connection->host}
+//    sql_port                = {$connection->port}  # optional, default is 3306
+//    sql_db                  = {$connection->database}
+//    sql_user                = {$connection->username}
+//    sql_pass                = {$connection->password}
+//}
+//EOF;
+//    }
 
-        return implode("; \\\n", $lines);
-    }
+//    public function createSource(string $name, ?string $parent, array $lines): string
+//    {
+//        $parentString = $parent ? sprintf(': %s', $parent) : '';
+//
+//        $content = implode("\n\n", $lines);
+//
+//        return <<<EOF
+//source {$name} {$parentString}
+//{
+//{$content}
+//}
+//EOF;
+//    }
 
-    public function createBaseSource(string $name, DatabaseConnection $connection): string {
-        return <<<EOF
-source {$name}
-{
-    type                    = {$connection->type}
-
-    sql_host                = {$connection->host}
-    sql_port                = {$connection->port}  # optional, default is 3306
-    sql_db                  = {$connection->database}
-    sql_user                = {$connection->username}
-    sql_pass                = {$connection->password}
-}
-EOF;
-    }
-
-    public function createSource(string $name, ?string $parent, array $lines): string {
-        $parentString = $parent ? sprintf(': %s', $parent) : '';
-
-        $content = implode("\n\n", $lines);
-
-        return <<<EOF
-source {$name} {$parentString}
-{
-{$content}
-}
-EOF;
-    }
-
-    public function createSourceDTO(string $name, ?string $parent)
+    public function createSource(string $name, ?string $parent): ManticoreSource
     {
         return ManticoreSource::create($name, $parent)
-            ->withQuery(...$this->sqlQueryPreDto())
-            ->withQuery(...$this->sqlQueryPostDto())
-            ->withQuery(...$this->sqlQueryPostIndexDto());
+            ->withQuery(...$this->sqlQueryPre())
+            ->withQuery(...$this->sqlQueryPost())
+            ->withQuery(...$this->sqlQueryPostIndex());
     }
 
-    public function terminateLines(string $lines): string {
-        return substr(
-            implode(
-                "\n",
-                array_map(
-                    static function (string $line) {
-                        return $line.' \\';
-                    },
-                    explode("\n", $lines)
-                )
-            ),
-            0,
-            -2
-        );
+//    public function terminateLines(string $lines): string
+//    {
+//        return substr(
+//            implode(
+//                "\n",
+//                array_map(
+//                    static function (string $line) {
+//                        return $line . ' \\';
+//                    },
+//                    explode("\n", $lines)
+//                )
+//            ),
+//            0,
+//            -2
+//        );
+//    }
+
+//    public function createAttrs(array $attrs): string
+//    {
+//        $lines = [];
+//
+//        foreach ($attrs as $name => $type) {
+//            $lines[] = $this->indent(1, sprintf(
+//                'sql_attr_%s = %s',
+//                $type,
+//                $name
+//            ));
+//        }
+//
+//        return implode("\n", $lines);
+//    }
+
+//    public function createFields(array $attrs): string
+//    {
+//        $lines = [];
+//
+//        foreach ($attrs as $name => $type) {
+//            $lines[] = $this->indent(1, sprintf(
+//                'sql_field_%s = %s',
+//                $type,
+//                $name
+//            ));
+//        }
+//
+//        return implode("\n", $lines);
+//    }
+
+//    public function createSourceSql(
+//        string $sql,
+//        array $where = []
+//    ): string
+//    {
+//        if (count($where)) {
+//            $whereString = $this->terminateLines(implode("\n", $where));
+//            $sql = <<<ASD
+//{$sql} \
+//WHERE \
+//    {$whereString}
+//ASD;
+//        }
+//
+//        $sql_query = <<<EOF
+//sql_query = \
+//    {$sql}
+//EOF;
+//
+//        return $this->indent(1, $sql_query);
+//    }
+
+//    public function createIndex(
+//        string $name,
+//        string $source,
+//        string $storage
+//    ): string
+//    {
+//        return <<<EOF
+//index {$name}
+//{
+//    source                  = {$source}
+//    path                    = {$storage}/{$name}
+//    min_word_len            = 2
+//    min_prefix_len          = 2, max_substring_len = 6
+//}
+//EOF;
+//    }
+
+//    public function createDistributedIndex(
+//        string $name,
+//        array $indexes
+//    ): string
+//    {
+//        $str = $this->indent(
+//            1,
+//            implode(
+//                "\n",
+//                array_map(static function (array $index) {
+//                    return sprintf(
+//                        'agent = %s:%s:%s',
+//                        $index['ip'],
+//                        $index['port'],
+//                        $index['name'],
+//                    );
+//                }, $indexes)
+//            )
+//        );
+//
+//        return <<<EOF
+//index {$name}
+//{
+//    type = distributed
+//{$str}
+//}
+//EOF;
+//    }
+
+    public function createIndexerConfig(array $config, $cleanup = false): string
+    {
+        return $this->createConfig('indexer', $config, self::INDEXER_CONFIGS, $cleanup);
     }
 
-    public function createAttrs(array $attrs): string {
-        $lines = [];
-
-        foreach ($attrs as $name => $type) {
-            $lines[] = $this->indent(1, sprintf(
-                'sql_attr_%s = %s',
-                $type,
-                $name
-            ));
-        }
-
-        return implode("\n", $lines);
+    public function createSearchdConfig(array $config, $cleanup = false): string
+    {
+        return $this->createConfig('searchd', $config, self::SEARCHD_CONFIGS, $cleanup);
     }
 
-    public function createFields(array $attrs): string {
-        $lines = [];
-
-        foreach ($attrs as $name => $type) {
-            $lines[] = $this->indent(1, sprintf(
-                'sql_field_%s = %s',
-                $type,
-                $name
-            ));
-        }
-
-        return implode("\n", $lines);
+    public function createCommonConfig(array $config, $cleanup = false): string
+    {
+        return $this->createConfig('common', $config, self::COMMON_CONFIGS, $cleanup);
     }
 
-    public function createSourceSql(
-        string $sql,
-        array $where = []
-    ): string {
-        if (count($where)) {
-            $whereString = $this->terminateLines(implode("\n", $where));
-            $sql = <<<ASD
-{$sql} \
-WHERE \
-    {$whereString}
-ASD;
-        }
-
-        $sql_query = <<<EOF
-sql_query = \
-    {$sql}
-EOF;
-
-        return $this->indent(1, $sql_query);
-    }
-
-    public function createIndex(
-        string $name,
-        string $source,
-        string $storage
-    ): string {
-        return <<<EOF
-index {$name}
-{
-    source                  = {$source}
-    path                    = {$storage}/{$name}
-    min_word_len            = 2
-    min_prefix_len          = 2, max_substring_len = 6
-}
-EOF;
-    }
-
-    public function createDistributedIndex(
-        string $name,
-        array $indexes
-    ): string {
-        $str = $this->indent(
-            1,
-            implode(
-                "\n",
-                array_map(static function (array $index) {
-                    return sprintf(
-                        'agent = %s:%s:%s',
-                        $index['ip'],
-                        $index['port'],
-                        $index['name'],
-                    );
-                }, $indexes)
-            )
-        );
-
-        return <<<EOF
-index {$name}
-{
-    type = distributed
-{$str}
-}
-EOF;
-    }
-
-    public function cleanupConfig(array $config, array $keys, $cleanup = false): array {
-        if (!$cleanup) {
-            return $config;
-        }
-
-        return array_intersect_key(
-            $config,
-            array_intersect_key(array_fill_keys($keys, null), $config),
-        );
-    }
-
-    public function createConfig(string $type, array $config, array $keys, $cleanup = false): string {
+    public function createConfig(string $type, array $config, array $keys, $cleanup = false): string
+    {
         $configs = $this->cleanupConfig($config, $keys, $cleanup);
 
         $lines = [];
         foreach ($configs as $key => $value) {
             if (is_array($value)) {
                 foreach ($value as $item) {
-                    $lines[] = $this->indent(1, sprintf('%s = %s', $key, $item));
+                    $lines[] = ConfigHelper::indent(1, sprintf('%s = %s', $key, $item));
                 }
             } else {
-                $lines[] = $this->indent(1, sprintf('%s = %s', $key, $value));
+                $lines[] = ConfigHelper::indent(1, sprintf('%s = %s', $key, $value));
             }
         }
 
@@ -409,31 +428,35 @@ EOF;
 EOF;
     }
 
-    public function createIndexerConfig(array $config, $cleanup = false): string {
-        return $this->createConfig('indexer', $config, self::INDEXER_CONFIGS, $cleanup);
+    public function cleanupConfig(array $config, array $keys, $cleanup = false): array
+    {
+        if (!$cleanup) {
+            return $config;
+        }
+
+        return array_intersect_key(
+            $config,
+            array_intersect_key(array_fill_keys($keys, null), $config),
+        );
     }
 
-    public function createSearchdConfig(array $config, $cleanup = false): string {
-        return $this->createConfig('searchd', $config, self::SEARCHD_CONFIGS, $cleanup);
-    }
-
-    public function createCommonConfig(array $config, $cleanup = false): string {
-        return $this->createConfig('common', $config, self::COMMON_CONFIGS, $cleanup);
-    }
-
-    public function eof(): string {
+    public function eof(): string
+    {
         return "# --eof--\n";
     }
 
-    public function listen(string $template): string {
+    public function listen(string $template): string
+    {
         return str_replace(array_keys($this->hostVars), array_values($this->hostVars), $template);
     }
 
-    public function configs(array $configs): string {
+    public function configs(array $configs): string
+    {
         return implode("\n\n", $configs);
     }
 
-    public function configsDTOs(ConfigPart ...$parts): string {
+    public function configPartsToString(ConfigPart ...$parts): string
+    {
         return implode("\n\n", array_map(fn(ConfigPart $part) => $part->toString(), $parts));
     }
 }
