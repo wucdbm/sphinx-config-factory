@@ -260,9 +260,9 @@ EOF;
     public function createSourceDTO(string $name, ?string $parent)
     {
         return ManticoreSource::create($name, $parent)
-            ->withQuery($this->sqlQueryPreDto())
-            ->withQuery($this->sqlQueryPostDto())
-            ->withQuery($this->sqlQueryPostIndexDto());
+            ->withQuery(...$this->sqlQueryPreDto())
+            ->withQuery(...$this->sqlQueryPostDto())
+            ->withQuery(...$this->sqlQueryPostIndexDto());
     }
 
     public function terminateLines(string $lines): string {
