@@ -14,6 +14,11 @@ readonly class Index implements ConfigPart
     {
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
     public function toString(
     ): string
     {
