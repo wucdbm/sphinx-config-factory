@@ -14,6 +14,7 @@
 namespace Wucdbm\Sphinx\ConfigFactory;
 
 use Wucdbm\Sphinx\ConfigFactory\DTO\ConfigPart;
+use Wucdbm\Sphinx\ConfigFactory\DTO\SqlAttr;
 
 class Factory {
 
@@ -236,6 +237,24 @@ EOF;
         $lines = [];
 
         foreach ($attrs as $name => $type) {
+            $lines[] = $this->indent(1, sprintf(
+                'sql_attr_%s = %s',
+                $type,
+                $name
+            ));
+        }
+
+        return implode("\n", $lines);
+    }
+
+    /**
+     * @return SqlAttr[]
+     */
+    public function createSqlAttrs(array $attrs): array {
+        $lines = [];
+
+        foreach ($attrs as $name => $type) {
+            $lines[] = new SqlAttr()
             $lines[] = $this->indent(1, sprintf(
                 'sql_attr_%s = %s',
                 $type,
