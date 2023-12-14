@@ -15,6 +15,7 @@ namespace Wucdbm\Sphinx\ConfigFactory;
 
 use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
 use Wucdbm\Sphinx\ConfigFactory\Config\Attr\SqlAttr;
+use Wucdbm\Sphinx\ConfigFactory\Config\ManticoreSource;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQuery;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQueryType;
 
@@ -254,6 +255,14 @@ source {$name} {$parentString}
 {$content}
 }
 EOF;
+    }
+
+    public function createSourceDTO(string $name, ?string $parent)
+    {
+        return ManticoreSource::create($name, $parent)
+            ->withQuery($this->sqlQueryPreDto())
+            ->withQuery($this->sqlQueryPostDto())
+            ->withQuery($this->sqlQueryPostIndexDto());
     }
 
     public function terminateLines(string $lines): string {
