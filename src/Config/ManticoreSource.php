@@ -229,7 +229,7 @@ readonly class ManticoreSource implements ConfigPart
             $this->attr,
             $this->attrMulti,
             $this->queryPre,
-            $this->queryRange,
+            $this->queryRange ? [$this->queryRange] : [],
             $this->query,
             $this->queryPost,
             $this->queryPostIndex,
