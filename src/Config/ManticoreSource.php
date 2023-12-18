@@ -28,6 +28,7 @@ namespace Wucdbm\Sphinx\ConfigFactory\Config;
 use Wucdbm\Sphinx\ConfigFactory\Config\Attr\SqlAttr;
 use Wucdbm\Sphinx\ConfigFactory\Config\AttrMulti\SqlAttrMulti;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQuery;
+use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQueryRange;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQueryType;
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
@@ -48,6 +49,8 @@ readonly class ManticoreSource implements ConfigPart
     /** @var SqlQuery[] */
     private array $queryPostIndex;
 
+    private ?SqlQueryRange $queryRange;
+
     /**
      * @param SqlAttr[] $attr
      * @param SqlAttrMulti[] $attrMulti
@@ -58,7 +61,8 @@ readonly class ManticoreSource implements ConfigPart
         private ?string $parent,
         array $attr,
         array $attrMulti,
-        array $queries
+        array $queries,
+        ?SqlQueryRange $queryRange
     ) {
         $this->attr = $attr;
         $this->attrMulti = $attrMulti;
@@ -91,11 +95,13 @@ readonly class ManticoreSource implements ConfigPart
         $this->query = $sql;
         $this->queryPost = $post;
         $this->queryPostIndex = $postIndex;
+
+        $this->queryRange = $queryRange;
     }
 
     public static function create(string $name, ?string $parent): self
     {
-        return new self($name, $parent, [], [], []);
+        return new self($name, $parent, [], [], [], null);
     }
 
     public function withAttrs(array $attrs): self
@@ -109,6 +115,7 @@ readonly class ManticoreSource implements ConfigPart
             ],
             $this->attrMulti,
             $this->getQueries(),
+            $this->queryRange,
         );
     }
 
@@ -122,7 +129,8 @@ readonly class ManticoreSource implements ConfigPart
                 ...$this->attrMulti,
                 $attr,
             ],
-            $this->getQueries()
+            $this->getQueries(),
+            $this->queryRange,
         );
     }
 
@@ -136,7 +144,20 @@ readonly class ManticoreSource implements ConfigPart
             [
                 ...$this->getQueries(),
                 ...$queries
-            ]
+            ],
+            $this->queryRange,
+        );
+    }
+
+    public function withQueryRange(SqlQueryRange $range): self
+    {
+        return new self(
+            $this->name,
+            $this->parent,
+            $this->attr,
+            $this->attrMulti,
+            $this->getQueries(),
+            $range,
         );
     }
 
@@ -150,7 +171,8 @@ readonly class ManticoreSource implements ConfigPart
             [
                 ...$this->getQueries(),
                 new SqlQuery(SqlQueryType::pre, $query)
-            ]
+            ],
+            $this->queryRange,
         );
     }
 
@@ -164,7 +186,8 @@ readonly class ManticoreSource implements ConfigPart
             [
                 ...$this->getQueries(),
                 new SqlQuery(SqlQueryType::post, $query)
-            ]
+            ],
+            $this->queryRange,
         );
     }
 
@@ -178,7 +201,8 @@ readonly class ManticoreSource implements ConfigPart
             [
                 ...$this->getQueries(),
                 new SqlQuery(SqlQueryType::post_index, $query)
-            ]
+            ],
+            $this->queryRange,
         );
     }
 
@@ -205,6 +229,7 @@ readonly class ManticoreSource implements ConfigPart
             $this->attr,
             $this->attrMulti,
             $this->queryPre,
+            $this->queryRange,
             $this->query,
             $this->queryPost,
             $this->queryPostIndex,
