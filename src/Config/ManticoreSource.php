@@ -149,7 +149,7 @@ readonly class ManticoreSource implements ConfigPart
         );
     }
 
-    public function withQueryRange(SqlQueryRange $range): self
+    public function withQueryRange(string $query, int $step, ?int $throttle): self
     {
         return new self(
             $this->name,
@@ -157,7 +157,7 @@ readonly class ManticoreSource implements ConfigPart
             $this->attr,
             $this->attrMulti,
             $this->getQueries(),
-            $range,
+            new SqlQueryRange($query, $step, $throttle),
         );
     }
 
