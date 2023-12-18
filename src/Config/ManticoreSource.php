@@ -225,7 +225,7 @@ readonly class ManticoreSource implements ConfigPart
     {
         $parentString = $this->parent ? sprintf(': %s', $this->parent) : '';
 
-        $wat = [
+        $configGroups = [
             $this->attr,
             $this->attrMulti,
             $this->queryPre,
@@ -235,7 +235,7 @@ readonly class ManticoreSource implements ConfigPart
             $this->queryPostIndex,
         ];
 
-        $parts = array_reduce($wat, function(array $acc, array $item) {
+        $parts = array_reduce($configGroups, function(array $acc, array $item) {
             if (!count($acc)) {
                 return $item;
             }
