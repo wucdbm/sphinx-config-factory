@@ -49,8 +49,6 @@ readonly class ManticoreSource implements ConfigPart
     /** @var SqlQuery[] */
     private array $queryPostIndex;
 
-    private ?SqlQueryRange $queryRange;
-
     /**
      * @param SqlAttr[] $attr
      * @param SqlAttrMulti[] $attrMulti
@@ -62,7 +60,6 @@ readonly class ManticoreSource implements ConfigPart
         array $attr,
         array $attrMulti,
         array $queries,
-        ?SqlQueryRange $queryRange
     ) {
         $this->attr = $attr;
         $this->attrMulti = $attrMulti;
@@ -95,8 +92,6 @@ readonly class ManticoreSource implements ConfigPart
         $this->query = $sql;
         $this->queryPost = $post;
         $this->queryPostIndex = $postIndex;
-
-        $this->queryRange = $queryRange;
     }
 
     public static function create(string $name, ?string $parent): self
@@ -115,11 +110,10 @@ readonly class ManticoreSource implements ConfigPart
             ],
             $this->attrMulti,
             $this->getQueries(),
-            $this->queryRange,
         );
     }
 
-    public function withAttrMulti(SqlAttrMulti $attr): self
+    public function withAttrMulti(SqlAttrMulti ...$attr): self
     {
         return new self(
             $this->name,
@@ -127,10 +121,9 @@ readonly class ManticoreSource implements ConfigPart
             $this->attr,
             [
                 ...$this->attrMulti,
-                $attr,
+                ...$attr,
             ],
             $this->getQueries(),
-            $this->queryRange,
         );
     }
 
@@ -145,19 +138,6 @@ readonly class ManticoreSource implements ConfigPart
                 ...$this->getQueries(),
                 ...$queries
             ],
-            $this->queryRange,
-        );
-    }
-
-    public function withQueryRange(string $query, int $step, ?int $throttle): self
-    {
-        return new self(
-            $this->name,
-            $this->parent,
-            $this->attr,
-            $this->attrMulti,
-            $this->getQueries(),
-            new SqlQueryRange($query, $step, $throttle),
         );
     }
 
@@ -172,7 +152,6 @@ readonly class ManticoreSource implements ConfigPart
                 ...$this->getQueries(),
                 new SqlQuery(SqlQueryType::pre, $query)
             ],
-            $this->queryRange,
         );
     }
 
@@ -187,7 +166,6 @@ readonly class ManticoreSource implements ConfigPart
                 ...$this->getQueries(),
                 new SqlQuery(SqlQueryType::post, $query)
             ],
-            $this->queryRange,
         );
     }
 
@@ -202,7 +180,6 @@ readonly class ManticoreSource implements ConfigPart
                 ...$this->getQueries(),
                 new SqlQuery(SqlQueryType::post_index, $query)
             ],
-            $this->queryRange,
         );
     }
 
@@ -229,7 +206,6 @@ readonly class ManticoreSource implements ConfigPart
             $this->attr,
             $this->attrMulti,
             $this->queryPre,
-            $this->queryRange ? [$this->queryRange] : [],
             $this->query,
             $this->queryPost,
             $this->queryPostIndex,

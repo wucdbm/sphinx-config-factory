@@ -3,7 +3,6 @@
 namespace Wucdbm\Sphinx\ConfigFactory\Config\Query;
 
 use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
-use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQueryType;
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
 readonly class SqlQuery implements ConfigPart
@@ -11,7 +10,8 @@ readonly class SqlQuery implements ConfigPart
     public function __construct(
         private SqlQueryType $type,
         private string $sql,
-        private array $where = []
+        private array $where = [],
+        private ?SqlQueryRange $range = null,
     )
     {
     }
@@ -28,15 +28,27 @@ readonly class SqlQuery implements ConfigPart
         if (count($this->where)) {
             $whereString = ConfigHelper::terminateLines(implode("\n", $this->where));
             $sql = <<<ASD
-{$sql} \
+$sql \
 WHERE \
-    {$whereString}
+    $whereString
 ASD;
         }
 
-        $type = $this->type->toString();
-        return <<<EOF
-{$type} = {$sql}
-EOF;
+        $lines = [
+            sprintf(
+                '%s = %s',
+                $this->type->toString(),
+                $sql,
+            )
+        ];
+
+        if ($this->range) {
+            $lines = [
+                $this->range->toString(),
+                ...$lines
+            ];
+        }
+
+        return implode("\n\n", $lines);
     }
 }
