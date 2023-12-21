@@ -12,7 +12,7 @@ readonly class SqlAttrMulti implements ConfigPart
         private SqlAttrMultiFieldType $type,
         private SqlAttrMultiSourceType $sourceType,
         private string $dataQuery,
-        private string $rangeQuery,
+        private ?string $rangeQuery = null,
     )
     {
     }
