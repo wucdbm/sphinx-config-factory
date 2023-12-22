@@ -8,9 +8,9 @@ final readonly class RemoteTableOptions implements ConfigPart
 {
     public function __construct(
         public int $retryCount,
-        public ?RemoteTableHaStrategy $haStrategy,
-        public ?RemoteTableConn $conn,
-        public ?RemoteTableBlackhole $blackhole,
+        public ?HaStrategy $haStrategy,
+        public ?Conn $conn,
+        public ?Blackhole $blackhole,
     )
     {
     }

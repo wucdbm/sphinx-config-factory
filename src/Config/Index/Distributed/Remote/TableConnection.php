@@ -4,7 +4,7 @@ namespace Wucdbm\Sphinx\ConfigFactory\Config\Index\Distributed\Remote;
 
 use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
 
-final readonly class RemoteTableConnection implements ConfigPart
+final readonly class TableConnection implements ConfigPart
 {
     /** @var string[] */
     public array $indices;

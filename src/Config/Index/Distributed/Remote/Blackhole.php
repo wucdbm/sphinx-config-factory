@@ -4,7 +4,7 @@ namespace Wucdbm\Sphinx\ConfigFactory\Config\Index\Distributed\Remote;
 
 use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
 
-enum RemoteTableBlackhole: int implements ConfigPart
+enum Blackhole: int implements ConfigPart
 {
     case true = 1;
     case false = 0;

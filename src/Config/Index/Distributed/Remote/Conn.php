@@ -4,7 +4,7 @@ namespace Wucdbm\Sphinx\ConfigFactory\Config\Index\Distributed\Remote;
 
 use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
 
-enum RemoteTableConn: string implements ConfigPart
+enum Conn: string implements ConfigPart
 {
     case pconn = 'pconn';
     case agent_persistent = 'agent_persistent';

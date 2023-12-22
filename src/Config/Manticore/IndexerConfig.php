@@ -2,7 +2,7 @@
 
 namespace Wucdbm\Sphinx\ConfigFactory\Config\Manticore;
 
-readonly class IndexerConfig extends AbstractManticoreConfig
+readonly class IndexerConfig extends AbstractCoreConfig
 {
     public function __construct(array $config)
     {

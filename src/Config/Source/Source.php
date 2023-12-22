@@ -34,7 +34,7 @@ use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQueryType;
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 use Wucdbm\Sphinx\ConfigFactory\Config\DatabaseConnection;
 
-readonly class ManticoreSource implements ConfigPart
+readonly class Source implements ConfigPart
 {
     /** @var SqlAttr[] */
     private array $attr;

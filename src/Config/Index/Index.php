@@ -3,14 +3,14 @@
 namespace Wucdbm\Sphinx\ConfigFactory\Config\Index;
 
 use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
-use Wucdbm\Sphinx\ConfigFactory\Config\Source\ManticoreSource;
+use Wucdbm\Sphinx\ConfigFactory\Config\Source\Source;
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
-readonly class ManticoreIndex implements ConfigPart
+readonly class Index implements ConfigPart
 {
     public function __construct(
         private string $name,
-        private ManticoreSource $source,
+        private Source $source,
         private string $storage,
     )
     {

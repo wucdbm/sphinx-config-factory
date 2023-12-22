@@ -7,7 +7,7 @@ use Wucdbm\Sphinx\ConfigFactory\Config\Index\Distributed\LocalTable;
 use Wucdbm\Sphinx\ConfigFactory\Config\Index\Distributed\RemoteTable;
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
-readonly class ManticoreDistributedIndex implements ConfigPart
+readonly class DistributedIndex implements ConfigPart
 {
     /** @var (RemoteTable|LocalTable)[] */
     private array $tables;

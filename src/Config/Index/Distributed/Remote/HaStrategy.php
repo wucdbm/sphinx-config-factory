@@ -4,7 +4,7 @@ namespace Wucdbm\Sphinx\ConfigFactory\Config\Index\Distributed\Remote;
 
 use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
 
-enum RemoteTableHaStrategy: string implements ConfigPart
+enum HaStrategy: string implements ConfigPart
 {
     case random = 'random';
     case roundrobin = 'roundrobin';

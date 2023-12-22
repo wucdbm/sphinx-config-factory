@@ -5,7 +5,7 @@ namespace Wucdbm\Sphinx\ConfigFactory\Config\Manticore;
 use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
-abstract readonly class AbstractManticoreConfig implements ConfigPart
+abstract readonly class AbstractCoreConfig implements ConfigPart
 {
 
     public function __construct(

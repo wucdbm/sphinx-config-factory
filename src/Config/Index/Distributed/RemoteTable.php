@@ -3,7 +3,7 @@
 namespace Wucdbm\Sphinx\ConfigFactory\Config\Index\Distributed;
 
 use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
-use Wucdbm\Sphinx\ConfigFactory\Config\Index\Distributed\Remote\RemoteTableConnection;
+use Wucdbm\Sphinx\ConfigFactory\Config\Index\Distributed\Remote\TableConnection;
 use Wucdbm\Sphinx\ConfigFactory\Config\Index\Distributed\Remote\RemoteTableOptions;
 
 final readonly class RemoteTable implements ConfigPart
@@ -13,7 +13,7 @@ final readonly class RemoteTable implements ConfigPart
 
     public function __construct(
         public ?RemoteTableOptions $options,
-        RemoteTableConnection ...$indices
+        TableConnection ...$indices
     )
     {
     }
@@ -25,7 +25,7 @@ final readonly class RemoteTable implements ConfigPart
             implode(
                 '|',
                 array_map(
-                    static fn(RemoteTableConnection $conn) => $conn->toString(),
+                    static fn(TableConnection $conn) => $conn->toString(),
                     $this->indices
                 ),
             ),
