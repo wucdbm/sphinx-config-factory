@@ -13,6 +13,7 @@
 
 namespace Wucdbm\Sphinx\ConfigFactory;
 
+use Wucdbm\Sphinx\ConfigFactory\Config\DatabaseConnection;
 use Wucdbm\Sphinx\ConfigFactory\Config\Source\Source;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQuery;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQueryType;
@@ -94,7 +95,7 @@ class Factory
         return $this->queryPostIndex;
     }
 
-    public function createSource(string $name, ?string $parent): Source
+    public function createSource(string $name, string|DatabaseConnection $parent): Source
     {
         return Source::create($name, $parent)
             ->withQuery(...$this->sqlQueryPre())
