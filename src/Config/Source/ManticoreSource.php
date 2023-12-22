@@ -23,14 +23,16 @@
  * IN PART.
  */
 
-namespace Wucdbm\Sphinx\ConfigFactory\Config;
+namespace Wucdbm\Sphinx\ConfigFactory\Config\Source;
 
 use Wucdbm\Sphinx\ConfigFactory\Config\Attr\SqlAttr;
 use Wucdbm\Sphinx\ConfigFactory\Config\AttrMulti\SqlAttrMulti;
+use Wucdbm\Sphinx\ConfigFactory\Config\BlankLine;
+use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQuery;
-use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQueryRange;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQueryType;
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
+use Wucdbm\Sphinx\ConfigFactory\Config\DatabaseConnection;
 
 readonly class ManticoreSource implements ConfigPart
 {
@@ -56,7 +58,7 @@ readonly class ManticoreSource implements ConfigPart
      */
     private function __construct(
         private string $name,
-        private ?string $parent,
+        private string|DatabaseConnection $parent,
         array $attr,
         array $attrMulti,
         array $queries,
@@ -200,7 +202,13 @@ readonly class ManticoreSource implements ConfigPart
 
     public function toString(): string
     {
-        $parentString = $this->parent ? sprintf(': %s', $this->parent) : '';
+        $parentString = $connectionString = '';
+
+        if (is_string($this->parent)) {
+            $parentString = sprintf(' : %s', $this->parent);
+        } else {
+            $connectionString = $this->parent->toString();
+        }
 
         $configGroups = [
             $this->attr,
@@ -232,10 +240,17 @@ readonly class ManticoreSource implements ConfigPart
             $parts
         );
 
+        if ($connectionString) {
+            $content = [
+                $connectionString,
+                ...$content
+            ];
+        }
+
         $content = ConfigHelper::indent(1, implode("\n", $content));
 
         return <<<EOF
-source {$this->name} {$parentString}
+source {$this->name}{$parentString}
 {
 {$content}
 }

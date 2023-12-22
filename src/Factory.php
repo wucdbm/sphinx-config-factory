@@ -13,7 +13,7 @@
 
 namespace Wucdbm\Sphinx\ConfigFactory;
 
-use Wucdbm\Sphinx\ConfigFactory\Config\ManticoreSource;
+use Wucdbm\Sphinx\ConfigFactory\Config\Source\ManticoreSource;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQuery;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQueryType;
 

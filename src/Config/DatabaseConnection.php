@@ -1,8 +1,8 @@
 <?php
 
-namespace Wucdbm\Sphinx\ConfigFactory;
+namespace Wucdbm\Sphinx\ConfigFactory\Config;
 
-final readonly class DatabaseConnection
+final readonly class DatabaseConnection implements ConfigPart
 {
     public function __construct(
         public string $type,
@@ -12,6 +12,21 @@ final readonly class DatabaseConnection
         public string $username,
         public string $password
     ) {
+    }
+
+    public function toString(): string
+    {
+        return <<<EOF
+type                    = {$this->type}
+
+sql_host                = {$this->host}
+sql_port                = {$this->port}  # optional, default is 3306
+sql_db                  = {$this->database}
+sql_user                = {$this->username}
+sql_pass                = {$this->password}
+EOF;
+
+        // TODO: Implement toString() method.
     }
 
     public static function fromUrl(string $url): self

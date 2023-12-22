@@ -1,6 +1,8 @@
 <?php
 
-namespace Wucdbm\Sphinx\ConfigFactory\Config;
+namespace Wucdbm\Sphinx\ConfigFactory\Config\Index;
+
+use Wucdbm\Sphinx\ConfigFactory\Config\Index\ManticoreIndex;
 
 readonly class TargetIndex
 {

@@ -1,7 +1,9 @@
 <?php
 
-namespace Wucdbm\Sphinx\ConfigFactory\Config;
+namespace Wucdbm\Sphinx\ConfigFactory\Config\Index;
 
+use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
+use Wucdbm\Sphinx\ConfigFactory\Config\Source\ManticoreSource;
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
 readonly class ManticoreIndex implements ConfigPart
