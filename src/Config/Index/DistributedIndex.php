@@ -9,15 +9,15 @@ use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
 readonly class ManticoreDistributedIndex implements ConfigPart
 {
-    /** @var TargetIndex[] */
-    private array $indices;
+    /** @var (RemoteTable|LocalTable)[] */
+    private array $tables;
 
     public function __construct(
         private string $name,
-        RemoteTable|LocalTable ...$indices,
+        RemoteTable|LocalTable ...$tables,
     )
     {
-        $this->indices = $indices;
+        $this->tables = $tables;
     }
 
     public function getName(): string
@@ -33,7 +33,7 @@ readonly class ManticoreDistributedIndex implements ConfigPart
                 "\n",
                 array_map(
                     static fn(RemoteTable|LocalTable $index) => $index->toString(),
-                    $this->indices
+                    $this->tables
                 )
             )
         );
