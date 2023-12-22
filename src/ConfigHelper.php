@@ -32,4 +32,39 @@ class ConfigHelper
             $lines
         );
     }
+
+    public function printConfig(string $type, array $config, array $keys, $cleanup = false): string
+    {
+        if ($cleanup) {
+            $config = $this->cleanupConfig($config, $keys);
+        }
+
+        $lines = [];
+        foreach ($config as $key => $value) {
+            if (is_array($value)) {
+                foreach ($value as $item) {
+                    $lines[] = ConfigHelper::indent(1, sprintf('%s = %s', $key, $item));
+                }
+            } else {
+                $lines[] = ConfigHelper::indent(1, sprintf('%s = %s', $key, $value));
+            }
+        }
+
+        $configString = implode("\n", $lines);
+
+        return <<<EOF
+{$type}
+{
+{$configString}
+}
+EOF;
+    }
+
+    public static function cleanupConfig(array $config, array $keys): array
+    {
+        return array_intersect_key(
+            $config,
+            array_intersect_key(array_fill_keys($keys, null), $config),
+        );
+    }
 }
