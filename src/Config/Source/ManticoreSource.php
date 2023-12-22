@@ -96,9 +96,9 @@ readonly class ManticoreSource implements ConfigPart
         $this->queryPostIndex = $postIndex;
     }
 
-    public static function create(string $name, ?string $parent): self
+    public static function create(string $name, string|DatabaseConnection $parent): self
     {
-        return new self($name, $parent, [], [], [], null);
+        return new self($name, $parent, [], [], []);
     }
 
     public function withAttrs(array $attrs): self
