@@ -18,7 +18,7 @@ class ManticoreConfig implements ConfigPart
 
     public function toString(): string
     {
-        implode("\n\n", array_map(fn(ConfigPart $part) => $part->toString(), $this->configs));
+        return implode("\n\n", array_map(fn(ConfigPart $part) => $part->toString(), $this->configs));
     }
 
 }
