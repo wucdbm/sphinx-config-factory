@@ -30,6 +30,7 @@ readonly class SearchdConfig extends AbstractCoreConfig
             'pid_file',
             'seamless_rotate',
             'preopen_indexes',
+            'preopen_tables',
             'unlink_old',
             'attr_flush_period',
             'mva_updates_pool',
