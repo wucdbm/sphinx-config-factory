@@ -44,8 +44,14 @@ readonly class Index implements ConfigPart
 
         $config = ConfigHelper::indent(1, implode("\n", $lines));
 
+        $source = str_replace(
+            '$index_name',
+            $this->name,
+            $this->source->toString(),
+        );
+
         return <<<EOF
-{$this->source->toString()}
+{$source}
 
 index {$this->name}
 {
