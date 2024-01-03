@@ -2,15 +2,20 @@
 
 namespace Wucdbm\Sphinx\ConfigFactory\Config\Attr;
 
-use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
+use Wucdbm\Sphinx\ConfigFactory\Config\OrderableConfigPart;
 
-readonly class SqlAttr implements ConfigPart
+readonly class SqlAttr implements OrderableConfigPart
 {
     public function __construct(
         private string $field,
         private SqlAttrType $type,
     )
     {
+    }
+
+    public function getPriority(): int
+    {
+        return 100;
     }
 
     public static function fromArray(array $attrs): array

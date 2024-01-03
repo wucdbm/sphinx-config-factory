@@ -29,6 +29,7 @@ use Wucdbm\Sphinx\ConfigFactory\Config\Attr\SqlAttr;
 use Wucdbm\Sphinx\ConfigFactory\Config\AttrMulti\SqlAttrMulti;
 use Wucdbm\Sphinx\ConfigFactory\Config\BlankLine;
 use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
+use Wucdbm\Sphinx\ConfigFactory\Config\OrderableConfigPart;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQuery;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQueryType;
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
@@ -36,163 +37,74 @@ use Wucdbm\Sphinx\ConfigFactory\Config\DatabaseConnection;
 
 readonly class Source implements ConfigPart
 {
-    /** @var SqlAttr[] */
-    private array $attr;
+    /** @var OrderableConfigPart[] */
+    private array $configs;
 
-    /** @var SqlAttrMulti[] */
-    private array $attrMulti;
-
-    /** @var SqlQuery[] */
-    private array $queryPre;
-    /** @var SqlQuery[] */
-    private array $query;
-    /** @var SqlQuery[] */
-    private array $queryPost;
-    /** @var SqlQuery[] */
-    private array $queryPostIndex;
-
-    /**
-     * @param SqlAttr[] $attr
-     * @param SqlAttrMulti[] $attrMulti
-     * @param SqlQuery[] $queries
-     */
     private function __construct(
         private string $name,
         private string|DatabaseConnection $parent,
-        array $attr,
-        array $attrMulti,
-        array $queries,
+        OrderableConfigPart ...$configs
     ) {
-        $this->attr = $attr;
-        $this->attrMulti = $attrMulti;
-
-        $sql = $pre = $post = $postIndex = [];
-
-        foreach ($queries as $query) {
-            switch ($query->getType()) {
-                case SqlQueryType::sql:
-                    $sql[] = $query;
-                    break;
-                case SqlQueryType::pre:
-                    $pre[] = $query;
-                    break;
-                case SqlQueryType::post:
-                    $post[] = $query;
-                    break;
-                case SqlQueryType::post_index:
-                    $postIndex[] = $query;
-                    break;
-                default:
-                    throw new \RuntimeException(sprintf(
-                        'Query Type "%s" Unknown',
-                        $query->getType()->name
-                    ));
-            }
-        }
-
-        $this->queryPre = $pre;
-        $this->query = $sql;
-        $this->queryPost = $post;
-        $this->queryPostIndex = $postIndex;
+        $this->configs = $configs;
     }
 
-    public static function create(string $name, string|DatabaseConnection $parent): self
-    {
-        return new self($name, $parent, [], [], []);
-    }
-
-    public function withAttrs(array $attrs): self
+    private function clone(OrderableConfigPart ...$configs): self
     {
         return new self(
             $this->name,
             $this->parent,
-            [
-                ...$this->attr,
-                ...SqlAttr::fromArray($attrs)
+            ...[
+                ...$this->configs,
+                ...$configs
             ],
-            $this->attrMulti,
-            $this->getQueries(),
+        );
+    }
+
+    public static function create(string $name, string|DatabaseConnection $parent): self
+    {
+        return new self($name, $parent);
+    }
+
+    public function withAttrs(array $attrs): self
+    {
+        return $this->clone(
+            ...SqlAttr::fromArray($attrs),
         );
     }
 
     public function withAttrMulti(SqlAttrMulti ...$attr): self
     {
-        return new self(
-            $this->name,
-            $this->parent,
-            $this->attr,
-            [
-                ...$this->attrMulti,
-                ...$attr,
-            ],
-            $this->getQueries(),
+        return $this->clone(
+            ...$attr,
         );
     }
 
     public function withQuery(SqlQuery ...$queries): self
     {
-        return new self(
-            $this->name,
-            $this->parent,
-            $this->attr,
-            $this->attrMulti,
-            [
-                ...$this->getQueries(),
-                ...$queries
-            ],
+        return $this->clone(
+            ...$queries,
         );
     }
 
     public function withPreQuery(string $query): self
     {
-        return new self(
-            $this->name,
-            $this->parent,
-            $this->attr,
-            $this->attrMulti,
-            [
-                ...$this->getQueries(),
-                new SqlQuery(SqlQueryType::pre, $query)
-            ],
+        return $this->clone(
+            new SqlQuery(SqlQueryType::pre, $query),
         );
     }
 
     public function withPostQuery(string $query): self
     {
-        return new self(
-            $this->name,
-            $this->parent,
-            $this->attr,
-            $this->attrMulti,
-            [
-                ...$this->getQueries(),
-                new SqlQuery(SqlQueryType::post, $query)
-            ],
+        return $this->clone(
+            new SqlQuery(SqlQueryType::post, $query),
         );
     }
 
     public function withPostIndexQuery(string $query): self
     {
-        return new self(
-            $this->name,
-            $this->parent,
-            $this->attr,
-            $this->attrMulti,
-            [
-                ...$this->getQueries(),
-                new SqlQuery(SqlQueryType::post_index, $query)
-            ],
+        return $this->clone(
+            new SqlQuery(SqlQueryType::post_index, $query),
         );
-    }
-
-    private function getQueries(): array
-    {
-        return [
-            ...$this->queryPre,
-            ...$this->query,
-            ...$this->queryPost,
-            ...$this->queryPostIndex,
-        ];
     }
 
     public function getName(): string
@@ -210,16 +122,28 @@ readonly class Source implements ConfigPart
             $connectionString = $this->parent->toString();
         }
 
-        $configGroups = [
-            $this->attr,
-            $this->attrMulti,
-            $this->queryPre,
-            $this->query,
-            $this->queryPost,
-            $this->queryPostIndex,
-        ];
+        $groupedConfigs = [];
 
-        $parts = array_reduce($configGroups, function(array $acc, array $item) {
+        foreach ($this->configs as $config) {
+            if (!isset($groupedConfigs[$config->getPriority()])) {
+                $groupedConfigs[$config->getPriority()] = [];
+            }
+
+            $groupedConfigs[$config->getPriority()] = $config;
+        }
+
+        ksort($groupedConfigs);
+
+//        $configGroups = [
+//            $this->attr,
+//            $this->attrMulti,
+//            $this->queryPre,
+//            $this->query,
+//            $this->queryPost,
+//            $this->queryPostIndex,
+//        ];
+
+        $parts = array_reduce($groupedConfigs, function(array $acc, array $item) {
             if (!count($acc)) {
                 return $item;
             }

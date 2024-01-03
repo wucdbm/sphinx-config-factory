@@ -2,10 +2,10 @@
 
 namespace Wucdbm\Sphinx\ConfigFactory\Config\AttrMulti;
 
-use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
+use Wucdbm\Sphinx\ConfigFactory\Config\OrderableConfigPart;
 use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
-readonly class SqlAttrMulti implements ConfigPart
+readonly class SqlAttrMulti implements OrderableConfigPart
 {
     public function __construct(
         private string $field,
@@ -15,6 +15,11 @@ readonly class SqlAttrMulti implements ConfigPart
         private ?string $rangeQuery = null,
     )
     {
+    }
+
+    public function getPriority(): int
+    {
+        return 200;
     }
 
     public function toString(): string
