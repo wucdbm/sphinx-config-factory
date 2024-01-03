@@ -62,9 +62,6 @@ readonly class ColumnarConfig implements OrderableConfigPart
             );
         }
 
-        return ConfigHelper::indent(
-            1,
-            implode("\n", $lines)
-        );
+        return implode("\n", $lines);
     }
 }
