@@ -129,19 +129,10 @@ readonly class Source implements ConfigPart
                 $groupedConfigs[$config->getPriority()] = [];
             }
 
-            $groupedConfigs[$config->getPriority()] = $config;
+            $groupedConfigs[$config->getPriority()][] = $config;
         }
 
         ksort($groupedConfigs);
-
-//        $configGroups = [
-//            $this->attr,
-//            $this->attrMulti,
-//            $this->queryPre,
-//            $this->query,
-//            $this->queryPost,
-//            $this->queryPostIndex,
-//        ];
 
         $parts = array_reduce($groupedConfigs, function(array $acc, array $item) {
             if (!count($acc)) {
