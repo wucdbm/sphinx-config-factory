@@ -29,6 +29,7 @@ use Wucdbm\Sphinx\ConfigFactory\Config\Attr\SqlAttr;
 use Wucdbm\Sphinx\ConfigFactory\Config\AttrMulti\SqlAttrMulti;
 use Wucdbm\Sphinx\ConfigFactory\Config\BlankLine;
 use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
+use Wucdbm\Sphinx\ConfigFactory\Config\Index\ColumnarConfig;
 use Wucdbm\Sphinx\ConfigFactory\Config\OrderableConfigPart;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQuery;
 use Wucdbm\Sphinx\ConfigFactory\Config\Query\SqlQueryType;
@@ -107,10 +108,10 @@ readonly class Source implements ConfigPart
         );
     }
 
-    public function withColumnarConfig(array $fields = [], array $stringsNoHash = []): self
+    public function withSourceLine(string $line): self
     {
         return $this->clone(
-            new ColumnarConfig($fields, $stringsNoHash),
+            new SourceLine($line),
         );
     }
 

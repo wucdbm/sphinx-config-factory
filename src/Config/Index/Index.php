@@ -8,12 +8,42 @@ use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 
 readonly class Index implements ConfigPart
 {
+    private array $options;
+    private ?ColumnarConfig $columnarConfig;
+
     public function __construct(
         private string $name,
         private Source $source,
         private string $storage,
+        array $options = [],
     )
     {
+        $this->options = ConfigHelper::cleanupConfig($options, [
+            'min_word_len',
+
+            'min_prefix_len',
+            'min_infix_len',
+
+            'prefix_fields',
+            'infix_fields',
+            'max_substring_len',
+
+            'columnar_attrs',
+            'columnar_strings_no_hash',
+        ]);
+    }
+
+    public function withColumnarConfig(?ColumnarConfig $columnarConfig): self
+    {
+        $self = new self(
+            $this->name,
+            $this->source,
+            $this->storage,
+        );
+
+        $self->columnarConfig = $columnarConfig;
+
+        return $self;
     }
 
     public function getName(): string
@@ -36,11 +66,25 @@ readonly class Index implements ConfigPart
         $lines = [
             $sourceLine,
             $pathLine,
-            'min_word_len            = 2',
-            'min_prefix_len          = 2, max_substring_len = 6',
+//            'min_word_len            = 2',
+//            'min_prefix_len          = 2, max_substring_len = 6',
 //            'min_prefix_len          = 2',
 //            'max_substring_len = 6',
         ];
+
+        $lines[] = '';
+
+        foreach ($this->options as $option => $value) {
+            $lines[] = sprintf(
+                '%s = %s',
+                $option,
+                $value,
+            );
+        }
+
+        if ($this->columnarConfig) {
+            $lines[] = $this->columnarConfig->toString();
+        }
 
         $config = ConfigHelper::indent(1, implode("\n", $lines));
 

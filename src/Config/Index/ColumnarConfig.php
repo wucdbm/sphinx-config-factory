@@ -1,11 +1,10 @@
 <?php
 
-namespace Wucdbm\Sphinx\ConfigFactory\Config\Source;
+namespace Wucdbm\Sphinx\ConfigFactory\Config\Index;
 
-use Wucdbm\Sphinx\ConfigFactory\Config\OrderableConfigPart;
-use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
+use Wucdbm\Sphinx\ConfigFactory\Config\ConfigPart;
 
-readonly class ColumnarConfig implements OrderableConfigPart
+readonly class ColumnarConfig implements ConfigPart
 {
     public function __construct(
         /**
@@ -37,11 +36,6 @@ readonly class ColumnarConfig implements OrderableConfigPart
         private array $stringsNoHash = [],
     )
     {
-    }
-
-    public function getPriority(): int
-    {
-        return self::PRIORITY_COLUMNAR_CONFIG;
     }
 
     public function toString(): string
