@@ -107,7 +107,7 @@ readonly class Source implements ConfigPart
         );
     }
 
-    public function withColumnarConfig(array $fields, array $stringsNoHash): self
+    public function withColumnarConfig(array $fields = [], array $stringsNoHash = []): self
     {
         return $this->clone(
             new ColumnarConfig($fields, $stringsNoHash),

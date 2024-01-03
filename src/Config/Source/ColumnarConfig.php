@@ -22,6 +22,7 @@ readonly class ColumnarConfig implements OrderableConfigPart
          * @var string[]
          */
         private array $fields = [],
+
         /**
          * columnar_strings_no_hash
          * columnar_strings_no_hash = attr1, attr2, attr3
