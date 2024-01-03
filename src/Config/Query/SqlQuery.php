@@ -19,11 +19,11 @@ readonly class SqlQuery implements OrderableConfigPart
     public function getPriority(): int
     {
         return match($this->type) {
-            SqlQueryType::pre => 300,
-            SqlQueryType::sql => 301,
-            SqlQueryType::post => 302,
-            SqlQueryType::post_index => 303,
-            default => 399,
+            SqlQueryType::pre => self::PRIORITY_QUERY,
+            SqlQueryType::sql => self::PRIORITY_QUERY + 1,
+            SqlQueryType::post => self::PRIORITY_QUERY + 2,
+            SqlQueryType::post_index => self::PRIORITY_QUERY + 3,
+            default => self::PRIORITY_QUERY + 99,
         };
     }
 

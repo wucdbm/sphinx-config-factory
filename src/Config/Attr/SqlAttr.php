@@ -15,7 +15,7 @@ readonly class SqlAttr implements OrderableConfigPart
 
     public function getPriority(): int
     {
-        return 100;
+        return self::PRIORITY_ATTR;
     }
 
     public static function fromArray(array $attrs): array

@@ -19,7 +19,7 @@ readonly class SqlAttrMulti implements OrderableConfigPart
 
     public function getPriority(): int
     {
-        return 200;
+        return self::PRIORITY_ATTR_MULTI;
     }
 
     public function toString(): string
