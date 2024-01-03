@@ -9,7 +9,6 @@ use Wucdbm\Sphinx\ConfigFactory\ConfigHelper;
 readonly class Index implements ConfigPart
 {
     private array $options;
-    private ?ColumnarConfig $columnarConfig;
 
     public function __construct(
         private string $name,
@@ -33,19 +32,6 @@ readonly class Index implements ConfigPart
         ]);
     }
 
-    public function withColumnarConfig(?ColumnarConfig $columnarConfig): self
-    {
-        $self = new self(
-            $this->name,
-            $this->source,
-            $this->storage,
-        );
-
-        $self->columnarConfig = $columnarConfig;
-
-        return $self;
-    }
-
     public function getName(): string
     {
         return $this->name;
@@ -66,10 +52,6 @@ readonly class Index implements ConfigPart
         $lines = [
             $sourceLine,
             $pathLine,
-//            'min_word_len            = 2',
-//            'min_prefix_len          = 2, max_substring_len = 6',
-//            'min_prefix_len          = 2',
-//            'max_substring_len = 6',
         ];
 
         $lines[] = '';
@@ -80,10 +62,6 @@ readonly class Index implements ConfigPart
                 $option,
                 $value,
             );
-        }
-
-        if ($this->columnarConfig) {
-            $lines[] = $this->columnarConfig->toString();
         }
 
         $config = ConfigHelper::indent(1, implode("\n", $lines));
