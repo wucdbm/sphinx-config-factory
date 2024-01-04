@@ -97,13 +97,28 @@ enum SqlQueryType: string
      */
     case post_index = 'post_index';
 
+    /**
+     * Table kill-list
+     * A table can maintain a list of document IDs that can be used to suppress records in other tables. This feature is available for plain tables using database sources or plain tables using XML sources. In the case of database sources, the source needs to provide an additional query defined by sql_query_killlist . It will store in the table a list of documents that can be used by the server to remove documents from other plain tables.
+     *
+     * This query is expected to return a number of 1-column rows, each containing just the document ID.
+     *
+     * In many cases, the query is a union between a query that retrieves a list of updated documents and a list of deleted documents, e.g.:
+     *
+     * sql_query_killlist = \
+     * SELECT id FROM documents WHERE updated_ts>=@last_reindex UNION \
+     * SELECT id FROM documents_deleted WHERE deleted_ts>=@last_reindex
+     */
+    case kill_list = 'kill_list';
+
     public function toString(): string
     {
-        return match($this) {
-          self::sql => 'sql_query',
-          self::pre => 'sql_query_pre',
-          self::post => 'sql_query_post',
-          self::post_index => 'sql_query_post_index',
+        return match ($this) {
+            self::sql => 'sql_query',
+            self::pre => 'sql_query_pre',
+            self::post => 'sql_query_post',
+            self::post_index => 'sql_query_post_index',
+            self::kill_list => 'sql_query_killlist',
         };
     }
 }

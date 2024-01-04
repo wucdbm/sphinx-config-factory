@@ -15,6 +15,7 @@ readonly class Index implements ConfigPart
         private Source $source,
         private string $storage,
         array $options = [],
+        private ?KillList $killList = null,
     )
     {
         $this->options = ConfigHelper::cleanupConfig($options, [
@@ -37,8 +38,7 @@ readonly class Index implements ConfigPart
         return $this->name;
     }
 
-    public function toString(
-    ): string
+    public function toString(): string
     {
         $sourceLine = sprintf(
             'source = %s',
@@ -46,7 +46,7 @@ readonly class Index implements ConfigPart
         );
         $pathLine = sprintf(
             'path = %s',
-            $this->storage.DIRECTORY_SEPARATOR.$this->name
+            $this->storage . DIRECTORY_SEPARATOR . $this->name
         );
 
         $lines = [
@@ -55,6 +55,11 @@ readonly class Index implements ConfigPart
         ];
 
         $lines[] = '';
+
+        if ($this->killList) {
+            $lines[] = $this->killList->toString();
+            $lines[] = '';
+        }
 
         foreach ($this->options as $option => $value) {
             $lines[] = sprintf(
