@@ -23,6 +23,8 @@ readonly class SqlQuery implements OrderableConfigPart
             SqlQueryType::sql => self::PRIORITY_QUERY + 1,
             SqlQueryType::post => self::PRIORITY_QUERY + 2,
             SqlQueryType::post_index => self::PRIORITY_QUERY + 3,
+            SqlQueryType::pre_all => self::PRIORITY_QUERY + 4,
+            SqlQueryType::kill_list => self::PRIORITY_QUERY + 5,
             default => self::PRIORITY_QUERY + 99,
         };
     }

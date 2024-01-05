@@ -98,6 +98,11 @@ enum SqlQueryType: string
     case post_index = 'post_index';
 
     /**
+     * The sql_query_pre_all queries are executed to perform any necessary initial setup, such as setting per-connection encoding with MySQL. These queries run before the entire indexing process, and also after a reconnect for indexing MVA attributes and joined fields.
+     */
+    case pre_all = 'pre_all';
+
+    /**
      * Table kill-list
      * A table can maintain a list of document IDs that can be used to suppress records in other tables. This feature is available for plain tables using database sources or plain tables using XML sources. In the case of database sources, the source needs to provide an additional query defined by sql_query_killlist . It will store in the table a list of documents that can be used by the server to remove documents from other plain tables.
      *
@@ -118,6 +123,7 @@ enum SqlQueryType: string
             self::pre => 'sql_query_pre',
             self::post => 'sql_query_post',
             self::post_index => 'sql_query_post_index',
+            self::pre_all => 'sql_query_pre_all',
             self::kill_list => 'sql_query_killlist',
         };
     }
