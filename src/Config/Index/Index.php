@@ -38,6 +38,17 @@ readonly class Index implements ConfigPart
         return $this->name;
     }
 
+    public function withKillList(?KillList $killList): self
+    {
+        return new self(
+            $this->name,
+            $this->source,
+            $this->storage,
+            $this->options,
+            $killList,
+        );
+    }
+
     public function toString(): string
     {
         $sourceLine = sprintf(
