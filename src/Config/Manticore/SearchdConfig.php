@@ -18,6 +18,7 @@ readonly class SearchdConfig extends AbstractCoreConfig
             'listen',
             'log',
             'query_log',
+            'data_dir',
             'network_timeout',
             'read_timeout',
             'sphinxql_timeout',
