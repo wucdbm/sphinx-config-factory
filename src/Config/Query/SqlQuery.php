@@ -39,11 +39,16 @@ readonly class SqlQuery implements OrderableConfigPart
         $sql = ConfigHelper::terminateLines(trim($this->sql));
 
         if (count($this->where)) {
-            $whereString = ConfigHelper::terminateLines(implode("\nAND\n", $this->where));
+            $whereString = ConfigHelper::indent(
+                1,
+                ConfigHelper::terminateLines(
+                    implode("\nAND\n", $this->where)
+                )
+            );
             $sql = <<<ASD
 $sql \
 WHERE \
-    $whereString
+$whereString
 ASD;
         }
 
